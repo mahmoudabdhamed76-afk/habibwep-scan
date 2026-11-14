@@ -3,319 +3,532 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HabibWep Scan | فاحص المواقع والأمان</title>
+  <title>حبيب سكان | مركز أشعة متطور — Habib Scan</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --card: #121a30;
-      --border: #233052;
-      --text: #eef2ff;
+      --bg: #07111f;
+      --surface: #0e1c30;
+      --surface-2: #132540;
+      --border: #1f3659;
+      --text: #f1f5f9;
       --muted: #94a3b8;
+      --primary: #06b6d4;
+      --primary-dark: #0891b2;
       --accent: #38bdf8;
-      --good: #22c55e;
+      --good: #10b981;
       --warn: #f59e0b;
-      --bad: #ef4444;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at top, #152244 0%, var(--bg) 60%);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      background: radial-gradient(circle at top right, #0f294a 0%, var(--bg) 55%);
       color: var(--text);
-      min-height: 100vh;
-      padding: 32px 16px;
+      line-height: 1.6;
     }
+    a { color: inherit; text-decoration: none; }
     .container {
-      max-width: 920px;
+      max-width: 1120px;
       margin: 0 auto;
+      padding: 0 18px;
     }
-    header {
-      text-align: center;
-      margin-bottom: 28px;
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(7, 17, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
-    .badge {
-      display: inline-block;
-      background: rgba(56, 189, 248, 0.14);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-      letter-spacing: -0.5px;
-    }
-    header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-    }
-    .search-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    }
-    .search-box input {
-      flex: 1;
-      min-width: 220px;
-      background: #0b1122;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-size: 15px;
-      direction: ltr;
-      text-align: left;
-      outline: none;
-    }
-    .search-box input:focus {
-      border-color: var(--accent);
-    }
-    .search-box button {
-      background: var(--accent);
-      color: #061325;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      transition: opacity 0.15s ease;
-    }
-    .search-box button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-    .examples {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-      justify-content: center;
-    }
-    .examples button {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      direction: ltr;
-    }
-    .examples button:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-    .error {
-      margin-top: 18px;
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #fecaca;
-      padding: 12px 16px;
-      border-radius: 12px;
-      display: none;
-    }
-    .results {
-      margin-top: 24px;
-      display: none;
-      gap: 16px;
-      flex-direction: column;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-    }
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 15px;
-      color: var(--accent);
-    }
-    .score-wrap {
+    .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 14px 0;
       gap: 16px;
       flex-wrap: wrap;
     }
-    .score-num {
-      font-size: 42px;
-      font-weight: 800;
-      line-height: 1;
-    }
-    .kv {
+    .brand {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 7px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 13px;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
     }
-    .kv:last-child { border-bottom: none; }
-    .kv span:first-child { color: var(--muted); }
-    .kv span:last-child { direction: ltr; text-align: left; word-break: break-all; }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), #2563eb);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: #fff;
+    }
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .hero {
+      padding: 56px 0 40px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding: 36px 0 24px; }
+    }
     .pill {
       display: inline-block;
-      padding: 2px 10px;
+      padding: 5px 14px;
       border-radius: 999px;
+      background: rgba(6, 182, 212, 0.14);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      color: var(--accent);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.2;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0 0 24px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0284c7);
+      color: #fff;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .stats-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .stat {
+      background: var(--surface-2);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      color: var(--accent);
+    }
+    .stat span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    section { padding: 42px 0; }
+    .sec-title {
+      font-size: 26px;
+      margin: 0 0 8px;
+    }
+    .sec-sub {
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 15px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+    }
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .service-cat {
       font-size: 12px;
+      color: var(--accent);
       font-weight: 600;
     }
-    .pill.good { background: rgba(34, 197, 94, 0.16); color: #86efac; }
-    .pill.warn { background: rgba(245, 158, 11, 0.16); color: #fde68a; }
-    .pill.bad { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
+    .service-card h3 {
+      margin: 4px 0 8px;
+      font-size: 18px;
+    }
+    .service-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .prep-box {
+      background: rgba(56, 189, 248, 0.08);
+      border-right: 3px solid var(--primary);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      color: #cbd5e1;
+    }
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 12px;
+    }
+    .price {
+      color: var(--good);
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 820px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .field {
+      margin-bottom: 14px;
+    }
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      background: #081323;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 13px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--primary);
+    }
+    .msg-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: none;
+    }
+    .msg-ok {
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #a7f3d0;
+    }
+    .msg-err {
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="badge">HabibWep Scan</div>
-      <h1>فاحص المواقع والأمان الفوري</h1>
-      <p>افحص شهادة SSL، رؤوس الأمان (Security Headers)، سجلات DNS، وسرعة الاستجابة لأي موقع.</p>
-    </header>
-
-    <form class="search-box" id="scanForm">
-      <input id="urlInput" type="text" placeholder="https://example.com" required />
-      <button id="scanBtn" type="submit">ابدأ الفحص</button>
-    </form>
-
-    <div class="examples">
-      <button type="button" data-url="https://github.com">github.com</button>
-      <button type="button" data-url="https://cloudflare.com">cloudflare.com</button>
-      <button type="button" data-url="https://railway.app">railway.app</button>
-    </div>
-
-    <div class="error" id="errorBox"></div>
-
-    <div class="results" id="resultsBox">
-      <div class="card score-wrap">
-        <div>
-          <div style="color: var(--muted); font-size: 13px; margin-bottom: 4px;">التقييم العام للأمان والجاهزية</div>
-          <div id="finalUrlText" style="font-size: 14px; direction: ltr; text-align: left;"></div>
-        </div>
-        <div class="score-num" id="scoreNum">0/100</div>
+  <nav>
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="brand-icon">+</div>
+        <span>حبيب سكان | Habib Scan</span>
       </div>
-
-      <div class="grid">
-        <div class="card">
-          <h3>الاستجابة والشبكة</h3>
-          <div id="httpDetails"></div>
-        </div>
-        <div class="card">
-          <h3>شهادة الأمان (SSL / TLS)</h3>
-          <div id="tlsDetails"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>رؤوس الأمان (Security Headers)</h3>
-        <div id="headersDetails"></div>
-      </div>
-
-      <div class="card">
-        <h3>بيانات الصفحة (Meta)</h3>
-        <div id="metaDetails"></div>
+      <div class="nav-links">
+        <a href="#services">خدمات الأشعة</a>
+        <a href="#booking">حجز موعد</a>
+        <a href="#results">نتائج الفحوصات</a>
       </div>
     </div>
-  </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="pill">مركز أشعة وتشخيص طبي متطور — 24/7</div>
+        <h1>دقة تشخيصية فائقة بأحدث أجهزة الأشعة العالمية</h1>
+        <p>
+          في مركز <strong>حبيب سكان</strong> نوفر أحدث تقنيات الرنين المغناطيسي 3 تسلا، والأشعة المقطعية
+          128 مقطع، والسونار رباعي الأبعاد مع تقارير معتمدة من نخبة استشاريي الأشعة.
+        </p>
+        <div class="hero-actions">
+          <a href="#booking" class="btn btn-primary">احجز فحصك الآن</a>
+          <a href="#results" class="btn btn-outline">الاستعلام عن نتيجة</a>
+        </div>
+      </div>
+
+      <div class="stats-card">
+        <div class="stat">
+          <strong>3 Tesla</strong>
+          <span>رنين مغناطيسي فائق الدقة</span>
+        </div>
+        <div class="stat">
+          <strong>128 Slice</strong>
+          <span>أشعة مقطعية سريعة</span>
+        </div>
+        <div class="stat">
+          <strong>4D</strong>
+          <span>سونار ودوبلر ملون</span>
+        </div>
+        <div class="stat">
+          <strong>2 - 4 س</strong>
+          <span>تسليم التقارير الرقمية</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2 class="sec-title">خدمات الأشعة والتصوير الطبي</h2>
+      <p class="sec-sub">اختر الفحص المناسب للاطلاع على التفاصيل وتعليمات التحضير أو الحجز المباشر.</p>
+      <div class="services-grid" id="servicesGrid"></div>
+    </section>
+
+    <section class="two-col">
+      <div class="panel" id="booking">
+        <h2 class="sec-title">حجز موعد فحص</h2>
+        <p class="sec-sub">سجّل بياناتك وسنصدر لك رقم حجز فوري مع تعليمات التحضير.</p>
+
+        <form id="bookingForm">
+          <div class="field">
+            <label>الاسم الكامل للمريض</label>
+            <input type="text" id="patientName" placeholder="مثال: محمود صابر" required />
+          </div>
+          <div class="field">
+            <label>رقم الهاتف</label>
+            <input type="tel" id="phone" placeholder="010xxxxxxxx" required />
+          </div>
+          <div class="field">
+            <label>نوع الفحص المطلوب</label>
+            <select id="serviceSelect" required></select>
+          </div>
+          <div class="field">
+            <label>الفرع</label>
+            <select id="branch">
+              <option value="فرع المهندسين">فرع المهندسين — شارع جامعة الدول</option>
+              <option value="فرع مدينة نصر">فرع مدينة نصر — شارع عباس العقاد</option>
+              <option value="فرع المعادي">فرع المعادي — شارع اللاسلكي</option>
+            </select>
+          </div>
+          <div class="field" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label>التاريخ</label>
+              <input type="date" id="date" required />
+            </div>
+            <div>
+              <label>الوقت المفضل</label>
+              <select id="time">
+                <option value="10:00 صباحاً">10:00 صباحاً</option>
+                <option value="12:00 ظهراً">12:00 ظهراً</option>
+                <option value="03:00 عصراً">03:00 عصراً</option>
+                <option value="06:00 مساءً">06:00 مساءً</option>
+                <option value="09:00 مساءً">09:00 مساءً</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>ملاحظات طبية (اختياري)</label>
+            <textarea id="notes" rows="2" placeholder="أي حساسية من الصبغة أو تقارير سابقة..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">تأكيد الحجز</button>
+        </form>
+        <div id="bookingMsg" class="msg-box"></div>
+      </div>
+
+      <div class="panel" id="results">
+        <h2 class="sec-title">بوابة نتائج الأشعة</h2>
+        <p class="sec-sub">أدخل كود المتابعة الموجود على إيصال الفحص لمعرفة حالة التقرير الطبي.</p>
+
+        <form id="resultForm">
+          <div class="field">
+            <label>كود التقرير / الحجز</label>
+            <input type="text" id="resultCode" placeholder="مثال: HS-2026" style="direction:ltr; text-align:left;" required />
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary" style="flex:1;">استعلام</button>
+            <button type="button" class="btn btn-outline" id="sampleCodeBtn">تجربة كود HS-2026</button>
+          </div>
+        </form>
+
+        <div id="resultMsg" class="msg-box"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      حبيب سكان (Habib Scan) — مركز الأشعة والتشخيص الطبي المتطور • خدمة الطوارئ 24 ساعة • الخط الساخن: 19000
+    </div>
+  </footer>
 
   <script>
-    const form = document.getElementById('scanForm');
-    const urlInput = document.getElementById('urlInput');
-    const scanBtn = document.getElementById('scanBtn');
-    const errorBox = document.getElementById('errorBox');
-    const resultsBox = document.getElementById('resultsBox');
+    const servicesGrid = document.getElementById('servicesGrid');
+    const serviceSelect = document.getElementById('serviceSelect');
+    const dateInput = document.getElementById('date');
+    dateInput.valueAsDate = new Date();
 
-    document.querySelectorAll('.examples button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        urlInput.value = btn.dataset.url;
-        form.dispatchEvent(new Event('submit'));
-      });
-    });
+    async function loadServices() {
+      const res = await fetch('/api/services');
+      const { services } = await res.json();
 
-    function kvRow(label, value) {
-      return `<div class="kv"><span>${label}</span><span>${value ?? '—'}</span></div>`;
+      servicesGrid.innerHTML = services.map((s) => `
+        <article class="service-card">
+          <div>
+            <div class="service-cat">${s.category}</div>
+            <h3>${s.name}</h3>
+            <p>${s.description}</p>
+          </div>
+          <div>
+            <div class="prep-box"><strong>التحضير:</strong> ${s.prep}</div>
+            <div class="service-meta" style="margin-top:12px;">
+              <span>المدة: ${s.duration}</span>
+              <span class="price">${s.price}</span>
+            </div>
+            <button class="btn btn-outline" style="width:100%; margin-top:10px; padding:9px;" onclick="selectService('${s.id}')">
+              احجز هذا الفحص
+            </button>
+          </div>
+        </article>
+      `).join('');
+
+      serviceSelect.innerHTML = services
+        .map((s) => `<option value="${s.id}">${s.name} (${s.price})</option>`)
+        .join('');
     }
 
-    form.addEventListener('submit', async (e) => {
+    window.selectService = (id) => {
+      serviceSelect.value = id;
+      document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorBox.style.display = 'none';
-      resultsBox.style.display = 'none';
-      scanBtn.disabled = true;
-      scanBtn.textContent = 'جاري الفحص...';
+      const box = document.getElementById('bookingMsg');
+      box.style.display = 'none';
 
-      try {
-        const res = await fetch('/api/scan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: urlInput.value })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'حدث خطأ أثناء الفحص');
+      const payload = {
+        patientName: document.getElementById('patientName').value,
+        phone: document.getElementById('phone').value,
+        serviceId: serviceSelect.value,
+        branch: document.getElementById('branch').value,
+        date: dateInput.value,
+        time: document.getElementById('time').value,
+        notes: document.getElementById('notes').value
+      };
 
-        const scoreEl = document.getElementById('scoreNum');
-        scoreEl.textContent = `${data.score}/100`;
-        scoreEl.style.color =
-          data.score >= 75 ? 'var(--good)' : data.score >= 45 ? 'var(--warn)' : 'var(--bad)';
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
 
-        document.getElementById('finalUrlText').textContent = data.finalUrl;
-
-        document.getElementById('httpDetails').innerHTML =
-          kvRow('الحالة (Status)', `${data.status} ${data.statusText || ''}`) +
-          kvRow('زمن الاستجابة', `${data.latencyMs} ms`) +
-          kvRow('عناوين IP', (data.ips || []).join(', ')) +
-          kvRow('الخادم (Server)', data.server || 'مخفي / غير معلن');
-
-        if (data.tls?.available) {
-          document.getElementById('tlsDetails').innerHTML =
-            kvRow('الحالة', data.tls.authorized ? '<span class="pill good">صالحة وموثوقة</span>' : '<span class="pill warn">غير موثوقة</span>') +
-            kvRow('البروتوكول', data.tls.protocol) +
-            kvRow('المُصدر (Issuer)', data.tls.issuer) +
-            kvRow('الأيام المتبقية', `${data.tls.daysRemaining} يوم`);
-        } else {
-          document.getElementById('tlsDetails').innerHTML =
-            kvRow('الحالة', `<span class="pill bad">${data.tls?.error || 'غير متوفرة'}</span>`);
-        }
-
-        document.getElementById('headersDetails').innerHTML = (data.securityHeaders || [])
-          .map((h) =>
-            kvRow(
-              h.label,
-              h.present
-                ? `<span class="pill good">موجود</span>`
-                : `<span class="pill bad">مفقود</span>`
-            )
-          )
-          .join('');
-
-        document.getElementById('metaDetails').innerHTML =
-          kvRow('العنوان (Title)', data.meta?.title) +
-          kvRow('الوصف (Description)', data.meta?.description);
-
-        resultsBox.style.display = 'flex';
-      } catch (err) {
-        errorBox.textContent = err.message;
-        errorBox.style.display = 'block';
-      } finally {
-        scanBtn.disabled = false;
-        scanBtn.textContent = 'ابدأ الفحص';
+      if (!res.ok) {
+        box.className = 'msg-box msg-err';
+        box.textContent = data.error || 'تعذر إتمام الحجز';
+        box.style.display = 'block';
+        return;
       }
+
+      const b = data.booking;
+      box.className = 'msg-box msg-ok';
+      box.innerHTML = `
+        <strong>${b.status}</strong><br/>
+        كود المتابعة الخاص بك: <strong style="direction:ltr; display:inline-block;">${b.code}</strong><br/>
+        الفحص: ${b.serviceName} — ${b.branch}<br/>
+        الموعد: ${b.date} الساعة ${b.time}
+      `;
+      box.style.display = 'block';
+      document.getElementById('resultCode').value = b.code;
     });
+
+    async function lookupResult(code) {
+      const box = document.getElementById('resultMsg');
+      box.style.display = 'none';
+      const res = await fetch(`/api/results/${encodeURIComponent(code)}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        box.className = 'msg-box msg-err';
+        box.textContent = data.error || 'لم يتم العثور على النتيجة';
+        box.style.display = 'block';
+        return;
+      }
+
+      const r = data.result;
+      box.className = 'msg-box msg-ok';
+      box.innerHTML = `
+        <strong>الكود: ${r.code} — ${r.status}</strong><br/>
+        المريض: ${r.patientName}<br/>
+        الفحص: ${r.serviceName} (${r.branch})<br/>
+        الطبيب المسؤول: ${r.doctor}<br/>
+        <hr style="border-color: rgba(255,255,255,0.12); margin:8px 0;">
+        ${r.summary}
+      `;
+      box.style.display = 'block';
+    }
+
+    document.getElementById('resultForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      lookupResult(document.getElementById('resultCode').value);
+    });
+
+    document.getElementById('sampleCodeBtn').addEventListener('click', () => {
+      document.getElementById('resultCode').value = 'HS-2026';
+      lookupResult('HS-2026');
+    });
+
+    loadServices();
   </script>
 </body>
 </html>

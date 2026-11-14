@@ -1,7 +1,7 @@
 {
   "name": "habibwep-scan",
-  "version": "1.0.0",
-  "description": "HabibWep Scan - Fast website security, SSL, DNS, and HTTP headers scanner",
+  "version": "2.0.0",
+  "description": "Habib Scan - Advanced Radiology & Medical Imaging Center Web Platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

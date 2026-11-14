@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HabibWep Scan | فاحص المواقع والأمان</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a30;
+      --border: #233052;
+      --text: #eef2ff;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #152244 0%, var(--bg) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -0.5px;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .search-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+    .search-box input {
+      flex: 1;
+      min-width: 220px;
+      background: #0b1122;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 15px;
+      direction: ltr;
+      text-align: left;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+    .search-box button {
+      background: var(--accent);
+      color: #061325;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .search-box button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    .examples {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      justify-content: center;
+    }
+    .examples button {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      direction: ltr;
+    }
+    .examples button:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .error {
+      margin-top: 18px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      padding: 12px 16px;
+      border-radius: 12px;
+      display: none;
+    }
+    .results {
+      margin-top: 24px;
+      display: none;
+      gap: 16px;
+      flex-direction: column;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: var(--accent);
+    }
+    .score-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .score-num {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .kv {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+    }
+    .kv:last-child { border-bottom: none; }
+    .kv span:first-child { color: var(--muted); }
+    .kv span:last-child { direction: ltr; text-align: left; word-break: break-all; }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pill.good { background: rgba(34, 197, 94, 0.16); color: #86efac; }
+    .pill.warn { background: rgba(245, 158, 11, 0.16); color: #fde68a; }
+    .pill.bad { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">HabibWep Scan</div>
+      <h1>فاحص المواقع والأمان الفوري</h1>
+      <p>افحص شهادة SSL، رؤوس الأمان (Security Headers)، سجلات DNS، وسرعة الاستجابة لأي موقع.</p>
+    </header>
+
+    <form class="search-box" id="scanForm">
+      <input id="urlInput" type="text" placeholder="https://example.com" required />
+      <button id="scanBtn" type="submit">ابدأ الفحص</button>
+    </form>
+
+    <div class="examples">
+      <button type="button" data-url="https://github.com">github.com</button>
+      <button type="button" data-url="https://cloudflare.com">cloudflare.com</button>
+      <button type="button" data-url="https://railway.app">railway.app</button>
+    </div>
+
+    <div class="error" id="errorBox"></div>
+
+    <div class="results" id="resultsBox">
+      <div class="card score-wrap">
+        <div>
+          <div style="color: var(--muted); font-size: 13px; margin-bottom: 4px;">التقييم العام للأمان والجاهزية</div>
+          <div id="finalUrlText" style="font-size: 14px; direction: ltr; text-align: left;"></div>
+        </div>
+        <div class="score-num" id="scoreNum">0/100</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>الاستجابة والشبكة</h3>
+          <div id="httpDetails"></div>
+        </div>
+        <div class="card">
+          <h3>شهادة الأمان (SSL / TLS)</h3>
+          <div id="tlsDetails"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>رؤوس الأمان (Security Headers)</h3>
+        <div id="headersDetails"></div>
+      </div>
+
+      <div class="card">
+        <h3>بيانات الصفحة (Meta)</h3>
+        <div id="metaDetails"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('scanForm');
+    const urlInput = document.getElementById('urlInput');
+    const scanBtn = document.getElementById('scanBtn');
+    const errorBox = document.getElementById('errorBox');
+    const resultsBox = document.getElementById('resultsBox');
+
+    document.querySelectorAll('.examples button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        urlInput.value = btn.dataset.url;
+        form.dispatchEvent(new Event('submit'));
+      });
+    });
+
+    function kvRow(label, value) {
+      return `<div class="kv"><span>${label}</span><span>${value ?? '—'}</span></div>`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      resultsBox.style.display = 'none';
+      scanBtn.disabled = true;
+      scanBtn.textContent = 'جاري الفحص...';
+
+      try {
+        const res = await fetch('/api/scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlInput.value })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'حدث خطأ أثناء الفحص');
+
+        const scoreEl = document.getElementById('scoreNum');
+        scoreEl.textContent = `${data.score}/100`;
+        scoreEl.style.color =
+          data.score >= 75 ? 'var(--good)' : data.score >= 45 ? 'var(--warn)' : 'var(--bad)';
+
+        document.getElementById('finalUrlText').textContent = data.finalUrl;
+
+        document.getElementById('httpDetails').innerHTML =
+          kvRow('الحالة (Status)', `${data.status} ${data.statusText || ''}`) +
+          kvRow('زمن الاستجابة', `${data.latencyMs} ms`) +
+          kvRow('عناوين IP', (data.ips || []).join(', ')) +
+          kvRow('الخادم (Server)', data.server || 'مخفي / غير معلن');
+
+        if (data.tls?.available) {
+          document.getElementById('tlsDetails').innerHTML =
+            kvRow('الحالة', data.tls.authorized ? '<span class="pill good">صالحة وموثوقة</span>' : '<span class="pill warn">غير موثوقة</span>') +
+            kvRow('البروتوكول', data.tls.protocol) +
+            kvRow('المُصدر (Issuer)', data.tls.issuer) +
+            kvRow('الأيام المتبقية', `${data.tls.daysRemaining} يوم`);
+        } else {
+          document.getElementById('tlsDetails').innerHTML =
+            kvRow('الحالة', `<span class="pill bad">${data.tls?.error || 'غير متوفرة'}</span>`);
+        }
+
+        document.getElementById('headersDetails').innerHTML = (data.securityHeaders || [])
+          .map((h) =>
+            kvRow(
+              h.label,
+              h.present
+                ? `<span class="pill good">موجود</span>`
+                : `<span class="pill bad">مفقود</span>`
+            )
+          )
+          .join('');
+
+        document.getElementById('metaDetails').innerHTML =
+          kvRow('العنوان (Title)', data.meta?.title) +
+          kvRow('الوصف (Description)', data.meta?.description);
+
+        resultsBox.style.display = 'flex';
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+      } finally {
+        scanBtn.disabled = false;
+        scanBtn.textContent = 'ابدأ الفحص';
+      }
+    });
+  </script>
+</body>
+</html>

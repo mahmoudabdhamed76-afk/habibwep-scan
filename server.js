@@ -35,6 +35,10 @@ app.post('/api/state', (req, res) => {
   }
 });
 
+app.get(['/cms', '/cms/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cms.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

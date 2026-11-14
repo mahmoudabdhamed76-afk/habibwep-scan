@@ -1,15 +1,15 @@
 {
-  "name": "habibwep-scan",
-  "version": "2.0.0",
-  "description": "Habib Scan - Advanced Radiology & Medical Imaging Center Web Platform",
+  "name": "habib-scan-portal",
+  "version": "1.0.0",
+  "description": "HABIB SCAN Diagnostic Center Website & Admin CMS",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "dependencies": {
-    "express": "^4.21.1"
   }
 }
